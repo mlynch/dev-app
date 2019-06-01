@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConnect }) => {
-  const [ url, setUrl ] = useState('');
+  const [ url, setUrl ] = useState('http://localhost:3333');
 
   return (
     <IonModal

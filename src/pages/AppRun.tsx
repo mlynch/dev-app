@@ -4,7 +4,7 @@ import { Route, Redirect, Router, Switch } from 'react-router';
 
 import { AppContext } from '../State';
 
-export const AppPreviewPage: React.SFC = () => {
+export const AppRunPage: React.SFC = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
   return (

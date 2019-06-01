@@ -6,13 +6,21 @@ import { AppContext } from '../State';
 import { AppConnect } from './AppConnect';
 import { AppConnectOptions } from '../models';
 
-export const AppChooserPage: React.SFC = () => {
+import { Plugins } from '@capacitor/core';
+
+const { Browser } = Plugins;
+
+export const AppChoosePage: React.SFC = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
   const [ showAppConnect, setShowAppConnect ] = useState(false);
 
   const connectToApp = useCallback((options: AppConnectOptions) => {
     console.log('Connecting to app', options);
+
+    Browser.open({
+      url: options.url
+    });
   }, []);
 
   return (

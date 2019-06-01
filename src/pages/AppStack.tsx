@@ -3,8 +3,8 @@ import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel, I
 import { Route, Redirect, Router, Switch } from 'react-router';
 
 import { AppContext } from '../State';
-import { AppPreviewPage } from './AppPreviewPage';
-import { AppChooserPage } from './AppChooserPage';
+import { AppRunPage } from './AppRun';
+import { AppChoosePage } from './AppChoose';
 
 export const AppStack: React.SFC = () => {
   const { state, dispatch } = React.useContext(AppContext);
@@ -12,7 +12,7 @@ export const AppStack: React.SFC = () => {
   return (
     <IonPage>
       <IonRouterOutlet>
-        <Route path="/" component={AppChooserPage} />
+        <Route path="/" component={AppChoosePage} />
         <Redirect from="*" to="/" />
       </IonRouterOutlet>
     </IonPage>
