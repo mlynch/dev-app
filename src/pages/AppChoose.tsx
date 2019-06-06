@@ -1,26 +1,63 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { IonPage, IonButton, IonList, IonItem, IonAvatar, IonLabel, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon, IonMenuButton, IonSpinner } from '@ionic/react';
 import styled from 'styled-components'
 
 import { AppContext } from '../State';
 import { AppConnect } from './AppConnect';
-import { AppConnectOptions } from '../models';
+import { AppConnectOptions, DiscoveredService } from '../models';
 
 import { Plugins } from '@capacitor/core';
+import { Help } from './Help';
+import { ActionTypes } from '../actions';
 
-const { CapacitorView } = Plugins;
+const renderServices = (services: DiscoveredService[], onSelect: (service: DiscoveredService) => void) => {
+  return (
+    <>
+      <h4>Discovered</h4>
+      <IonList>
+        {services.map(service => {
+          return (
+            <IonItem onClick={() => onSelect(service)} key={service.id}>
+              <IonAvatar>
+                {service.name[0]}
+              </IonAvatar>
+              <IonLabel>
+                <h2>{service.name}</h2>
+                <p>{service.hostname} &middot; {service.address}</p>
+              </IonLabel>
+            </IonItem>
+          );
+        })}
+      </IonList>
+    </>
+  );
+}
 
 export const AppChoosePage: React.SFC = () => {
+  const { CapacitorView } = Plugins;
+
   const { state, dispatch } = React.useContext(AppContext);
 
   const [ showAppConnect, setShowAppConnect ] = useState(false);
+  const [ showHelp, setShowHelp ] = useState(false);
 
-  const connectToApp = useCallback((options: AppConnectOptions) => {
-    console.log('Connecting to app', options);
+  const connectToApp = useCallback((service: DiscoveredService) => {
+    const url = `http://${service.hostname}:${service.port}`;
     CapacitorView.open({
-      url: options.url
+      url: url
     });
   }, []);
+
+  useEffect(() => {
+    async function _getServices() {
+      const services = await Plugins.UDPDiscovery.getServices();
+      dispatch({
+        type: ActionTypes.SET_SERVICES,
+        services
+      });
+    }
+    _getServices();
+  }, [])
 
   return (
     <IonPage>
@@ -39,6 +76,11 @@ export const AppChoosePage: React.SFC = () => {
       </IonHeader>
       <IonContent padding>
         <h2>Apps</h2>
+
+        { state.services.length ?
+            renderServices(state.services, (service: DiscoveredService) => {
+              connectToApp(service);
+            }) : null }
 
         <h4>Instructions</h4>
         <IonList>
@@ -67,6 +109,9 @@ export const AppChoosePage: React.SFC = () => {
             </IonAvatar>
             <IonLabel>Preview &amp; enjoy</IonLabel>
           </IonItem>
+          <HavingTrouble>
+            <a href="#" onClick={() => setShowHelp(true)}>Having trouble?</a>
+          </HavingTrouble>
         </IonList>
       </IonContent>
       <AppListening>
@@ -79,6 +124,9 @@ export const AppChoosePage: React.SFC = () => {
         isOpen={showAppConnect}
         handleConnect={connectToApp}
         handleDismiss={() => setShowAppConnect(false)} />
+      <Help
+        isOpen={showHelp}
+        handleDismiss={() => setShowHelp(false)} />
     </IonPage>
   );
 }
@@ -100,6 +148,7 @@ const AppListening = styled.div`
     flex: 1;
   }
 `;
+
 const ChooseMessage = styled.div`
   position: absolute;
   top: 0;
@@ -110,4 +159,9 @@ const ChooseMessage = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+`;
+
+const HavingTrouble = styled.div`
+  text-align: center;
+  padding: 15px;
 `;

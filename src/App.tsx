@@ -15,6 +15,7 @@ import { Plugins } from '@capacitor/core';
 const App: React.FC = () => {
   useEffect(() => {
     Plugins.SplashScreen.hide();
+    Plugins.UDPDiscovery.start();
   }, []);
   
   return (

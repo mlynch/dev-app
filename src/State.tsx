@@ -1,14 +1,22 @@
 import React from "react";
+import { DiscoveredService } from "./models";
 
 let AppContext = (React as any).createContext();
 
 export interface StateType {
+  services: DiscoveredService[];
 }
 
 let initialState: StateType = {
+  services: []
 };
 
 let reducer = (state: any, action: any) => {
+  switch(action.type) {
+    case "setServices": {
+      return { ...state, services: action.services }
+    }
+  }
   return state;
 };
 

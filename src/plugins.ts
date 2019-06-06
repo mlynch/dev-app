@@ -23,7 +23,34 @@ export class CapacitorViewWeb extends WebPlugin {
     console.log('Would close preview');
   }
 }
-
-
-
 export const CapacitorView = new CapacitorViewWeb();
+
+export class UDPDiscoveryWeb extends WebPlugin {
+  constructor() {
+    super({
+      name: 'UDPDiscovery',
+      platforms: ['web']
+    });
+  }
+
+  async start() {
+  }
+
+  async stop() {
+  }
+
+  async getServices() {
+    return [
+      {
+        "id": "max-ionic",
+        "name": "Max Ionic",
+        "hostname": "localhost",
+        "address": "localhost",
+        "port": "3333",
+        "path": "" 
+      }
+    ];
+  }
+}
+
+export const UDPDiscovery = new UDPDiscoveryWeb();

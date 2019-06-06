@@ -4,10 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { CapacitorView } from './plugins';
+import { CapacitorView, UDPDiscovery } from './plugins';
 import { registerWebPlugin } from '@capacitor/core';
-console.log('Registering the web plugin', CapacitorView);
+console.log("Registering CapacitorView", CapacitorView, UDPDiscovery);
 registerWebPlugin(CapacitorView);
+registerWebPlugin(UDPDiscovery);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

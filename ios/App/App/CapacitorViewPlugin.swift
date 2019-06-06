@@ -19,6 +19,7 @@ public class CapacitorView: CAPPlugin {
       })
     }
     vc.shakeHandler = {() -> Void in
+      self.showDevMenu()
     }
     
     previewVC = vc
@@ -31,16 +32,40 @@ public class CapacitorView: CAPPlugin {
   }
   
   @objc func close(_ call: CAPPluginCall) {
+    closePreview(onDismissed: {
+      call.resolve()
+    })
+  }
+  
+  private func closePreview(onDismissed: @escaping (() -> Void)) {
     guard let vc = self.previewVC else {
-      call.reject("No active Capacitor View to close")
+      print("No active Capacitor View to close")
       return
     }
     
     DispatchQueue.main.async {
       vc.dismiss(animated: true, completion: {
-        call.resolve()
+        onDismissed();
       })
     }
+  }
+  
+  private func showDevMenu() {
+    let alert = UIAlertController(title: "Dev Menu", message: nil, preferredStyle: .actionSheet)
+    
+    alert.addAction(UIAlertAction(title: "Reload", style: .default , handler:{ (UIAlertAction)in
+      print("User click Approve button")
+    }))
+    
+    alert.addAction(UIAlertAction(title: "Exit Preview", style: .cancel, handler:{ (UIAlertAction)in
+      self.closePreview {
+        
+      }
+    }))
+    
+    self.bridge.viewController.present(alert, animated: true, completion: {
+      
+    })
   }
 }
 
