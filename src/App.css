@@ -1,11 +1,13 @@
 :root {
-  --ion-background-color: #272727;
+  --ion-background-color: #020814;
   --ion-background-color-rgb: 27, 27, 27;
+  --background: var(--ion-background-color);
 
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255, 255, 255;
 
-  --ion-color-step-50: #373a3f;
+  --ion-color-step-50: var(--ion-background-color);
+  /*
   --ion-color-step-100: #343a41;
   --ion-color-step-150: #3d4b52;
   --ion-color-step-200: #49555d;
@@ -24,8 +26,9 @@
   --ion-color-step-850: #dddfe1;
   --ion-color-step-900: #e8eaeb;
   --ion-color-step-950: #f4f4f5;
+  */
 
-  --ion-color-primary: #ec5e66;
+  --ion-color-primary: #fff;
   --ion-color-primary-rgb: 236, 94, 102;
   --ion-color-primary-contrast: #000000;
   --ion-color-primary-contrast-rgb: 0, 0, 0;

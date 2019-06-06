@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { IonPage, IonButton } from '@ionic/react';
+import { IonPage, IonButton, IonList, IonItem, IonAvatar, IonLabel, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon, IonMenuButton, IonSpinner } from '@ionic/react';
 import styled from 'styled-components'
 
 import { AppContext } from '../State';
@@ -24,14 +24,57 @@ export const AppChoosePage: React.SFC = () => {
 
   return (
     <IonPage>
-      <ChooseMessage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <IonTitle></IonTitle>
+          <IonButtons slot="end">
+            <IonButton fill="clear" onClick={() => setShowAppConnect(true)}>
+              <IonIcon name="add" />
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent padding>
+        <h2>Apps</h2>
+
+        <h4>Instructions</h4>
+        <IonList>
+          <IonItem>
+            <IonAvatar>
+            </IonAvatar>
+            <IonLabel>Enable &amp; connect to Wi-Fi</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonAvatar>
+            </IonAvatar>
+            <IonLabel>Connect computer to same network</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonAvatar>
+            </IonAvatar>
+            <IonLabel>Run <code>ionic serve -c</code></IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonAvatar>
+            </IonAvatar>
+            <IonLabel>Allow app to build</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonAvatar>
+            </IonAvatar>
+            <IonLabel>Preview &amp; enjoy</IonLabel>
+          </IonItem>
+        </IonList>
+      </IonContent>
+      <AppListening>
         <div>
-          <h2>Connect to App</h2>
-          <div>
-            <IonButton color="primary" onClick={() => setShowAppConnect(true)}>Connect</IonButton>
-          </div>
+          Listening for apps...
         </div>
-      </ChooseMessage>
+        <IonSpinner name="lines" />
+      </AppListening>
       <AppConnect
         isOpen={showAppConnect}
         handleConnect={connectToApp}
@@ -40,6 +83,23 @@ export const AppChoosePage: React.SFC = () => {
   );
 }
 
+const AppListening = styled.div`
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: white;
+  font-size: 14px;
+  background-color: #27323F;
+  border-radius: 12px;
+
+  div {
+    flex: 1;
+  }
+`;
 const ChooseMessage = styled.div`
   position: absolute;
   top: 0;
