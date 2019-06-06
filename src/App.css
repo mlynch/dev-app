@@ -35,3 +35,14 @@
   --ion-color-primary-shade: #d0535a;
   --ion-color-primary-tint: #ee6e75;
 }
+
+h1 {
+  margin-top: 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 20px;
+  font-weight: 700;
+}

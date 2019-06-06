@@ -81,7 +81,7 @@ export const AppChoosePage: React.SFC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent padding>
-        <h2>Apps</h2>
+        <h1>Apps</h1>
 
         { state.services.length ?
             renderServices(state.services, (service: DiscoveredService) => {
