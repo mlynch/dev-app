@@ -4,6 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { CapacitorView } from './plugins';
+import { registerWebPlugin } from '@capacitor/core';
+console.log('Registering the web plugin', CapacitorView);
+registerWebPlugin(CapacitorView);
+
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

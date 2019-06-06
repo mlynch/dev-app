@@ -8,7 +8,7 @@ import { AppConnectOptions } from '../models';
 
 import { Plugins } from '@capacitor/core';
 
-const { Browser } = Plugins;
+const { CapacitorView } = Plugins;
 
 export const AppChoosePage: React.SFC = () => {
   const { state, dispatch } = React.useContext(AppContext);
@@ -17,8 +17,7 @@ export const AppChoosePage: React.SFC = () => {
 
   const connectToApp = useCallback((options: AppConnectOptions) => {
     console.log('Connecting to app', options);
-
-    Browser.open({
+    CapacitorView.open({
       url: options.url
     });
   }, []);
@@ -50,4 +49,5 @@ const ChooseMessage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;

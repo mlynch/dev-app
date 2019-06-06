@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import { IonPage, IonApp, IonSplitPane } from '@ionic/react';
@@ -10,7 +10,13 @@ import { AppContextProvider } from './State';
 import { AppStack } from './pages/AppStack';
 import Menu from './components/Menu';
 
+import { Plugins } from '@capacitor/core';
+
 const App: React.FC = () => {
+  useEffect(() => {
+    Plugins.SplashScreen.hide();
+  }, []);
+  
   return (
   <AppContextProvider>
     <Router>
