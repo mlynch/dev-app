@@ -10,6 +10,12 @@ import { Plugins } from '@capacitor/core';
 import { Help } from './Help';
 import { ActionTypes } from '../actions';
 
+import wifiIcon from '../assets/wifi-icon.svg';
+import networkIcon from '../assets/network-icon.svg';
+import serveIcon from '../assets/serve-icon.svg';
+import buildIcon from '../assets/build-icon.svg';
+import enjoyIcon from '../assets/enjoy-icon.svg';
+
 const renderServices = (services: DiscoveredService[], onSelect: (service: DiscoveredService) => void) => {
   return (
     <>
@@ -86,26 +92,31 @@ export const AppChoosePage: React.SFC = () => {
         <IonList>
           <IonItem>
             <IonAvatar>
+              <img src={wifiIcon} alt="Wi-Fi" />
             </IonAvatar>
             <IonLabel>Enable &amp; connect to Wi-Fi</IonLabel>
           </IonItem>
           <IonItem>
             <IonAvatar>
+              <img src={networkIcon} alt="Network" />
             </IonAvatar>
             <IonLabel>Connect computer to same network</IonLabel>
           </IonItem>
           <IonItem>
             <IonAvatar>
+              <img src={serveIcon} alt="Serve" />
             </IonAvatar>
             <IonLabel>Run <code>ionic serve -c</code></IonLabel>
           </IonItem>
           <IonItem>
             <IonAvatar>
+              <img src={buildIcon} alt="Build" />
             </IonAvatar>
             <IonLabel>Allow app to build</IonLabel>
           </IonItem>
           <IonItem>
             <IonAvatar>
+              <img src={enjoyIcon} alt="Enjoy" />
             </IonAvatar>
             <IonLabel>Preview &amp; enjoy</IonLabel>
           </IonItem>
