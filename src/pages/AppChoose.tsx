@@ -48,7 +48,7 @@ export const AppChoosePage: React.SFC = () => {
   const [ showHelp, setShowHelp ] = useState(false);
 
   const connectToApp = useCallback((service: DiscoveredService) => {
-    const url = `http://${service.hostname}:${service.port}`;
+    const url = `http://${service.hostname}:${service.port}${service.path || ''}`;
     CapacitorView.open({
       url: url
     });
@@ -59,11 +59,19 @@ export const AppChoosePage: React.SFC = () => {
       const services = await Plugins.UDPDiscovery.getServices();
       dispatch({
         type: ActionTypes.SET_SERVICES,
-        services
+        services: services && services.services || []
       });
     }
-    _getServices();
+    const searchInterval = setInterval(() => {
+      _getServices();
+    }, 1000);
+
+    return () => {
+      clearInterval(searchInterval);
+    }
   }, [])
+
+  console.log('Rendering services', state.services);
 
   return (
     <IonPage>
