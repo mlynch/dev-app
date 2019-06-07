@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { IonPage, IonButton, IonList, IonItem, IonAvatar, IonLabel, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon, IonMenuButton, IonSpinner } from '@ionic/react';
 import styled from 'styled-components'
 
@@ -6,7 +6,7 @@ import { AppContext } from '../State';
 import { AppConnect } from './AppConnect';
 import { AppConnectOptions, DiscoveredService } from '../models';
 
-import { Plugins } from '@capacitor/core';
+import { Plugins, NetworkStatus } from '@capacitor/core';
 import { Help } from './Help';
 import { ActionTypes } from '../actions';
 
@@ -15,6 +15,20 @@ import networkIcon from '../assets/network-icon.svg';
 import serveIcon from '../assets/serve-icon.svg';
 import buildIcon from '../assets/build-icon.svg';
 import enjoyIcon from '../assets/enjoy-icon.svg';
+
+const renderNetworkStatus = (status: NetworkStatus) => {
+  console.log('Network status', status);
+  const isWifi = status && ['wifi', '4g'].indexOf(status.connectionType) >= 0;
+  const color = status && status.connected && isWifi ? '#6FCF97' : '#cf6e6e';
+  const type = isWifi ? 'Connected to Wi-Fi' : 'Not connected to Wi-Fi';
+
+  return (
+    <UINetworkStatus>
+      <div className="status-dot" style={{ backgroundColor: color }}></div>
+      {type}
+    </UINetworkStatus>
+  );
+}
 
 const renderServices = (services: DiscoveredService[], onSelect: (service: DiscoveredService) => void) => {
   return (
@@ -42,7 +56,7 @@ const renderServices = (services: DiscoveredService[], onSelect: (service: Disco
 export const AppChoosePage: React.SFC = () => {
   const { CapacitorView } = Plugins;
 
-  const { state, dispatch } = React.useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
 
   const [ showAppConnect, setShowAppConnect ] = useState(false);
   const [ showHelp, setShowHelp ] = useState(false);
@@ -50,7 +64,7 @@ export const AppChoosePage: React.SFC = () => {
   const connectToApp = useCallback((service: DiscoveredService) => {
     const url = `http://${service.hostname}:${service.port}${service.path || ''}`;
     CapacitorView.open({
-      url: url
+      url
     });
   }, []);
 
@@ -64,7 +78,7 @@ export const AppChoosePage: React.SFC = () => {
     }
     const searchInterval = setInterval(() => {
       _getServices();
-    }, 1000);
+    }, 10000);
 
     return () => {
       clearInterval(searchInterval);
@@ -88,15 +102,21 @@ export const AppChoosePage: React.SFC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent padding>
-        <h1>Apps</h1>
+      <IonContent>
+        <UIPadded>
+          <h1>Apps</h1>
+        </UIPadded>
+
+        {renderNetworkStatus(state.networkStatus)}
 
         { state.services.length ?
             renderServices(state.services, (service: DiscoveredService) => {
               connectToApp(service);
             }) : null }
 
-        <h4>Instructions</h4>
+        <UIPadded>
+          <h4>Instructions</h4>
+        </UIPadded>
         <IonList>
           <IonItem>
             <IonAvatar>
@@ -128,17 +148,17 @@ export const AppChoosePage: React.SFC = () => {
             </IonAvatar>
             <IonLabel>Preview &amp; enjoy</IonLabel>
           </IonItem>
-          <HavingTrouble>
+          <UIHavingTrouble>
             <a href="#" onClick={() => setShowHelp(true)}>Having trouble?</a>
-          </HavingTrouble>
+          </UIHavingTrouble>
         </IonList>
       </IonContent>
-      <AppListening>
+      <UIAppListening>
         <div>
           Listening for apps...
         </div>
         <IonSpinner name="lines" />
-      </AppListening>
+      </UIAppListening>
       <AppConnect
         isOpen={showAppConnect}
         handleConnect={connectToApp}
@@ -150,7 +170,28 @@ export const AppChoosePage: React.SFC = () => {
   );
 }
 
-const AppListening = styled.div`
+const UIPadded = styled.div`
+  padding: 16px;
+`;
+
+const UINetworkStatus = styled.div`
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  background-color: #1A232F;
+  font-size: 13px;
+  line-height: 16px;
+  color: #D1D3D5;
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border-radius: 10px;
+  }
+`;
+
+const UIAppListening = styled.div`
   position: fixed;
   bottom: 24px;
   left: 24px;
@@ -168,19 +209,7 @@ const AppListening = styled.div`
   }
 `;
 
-const ChooseMessage = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-`;
-
-const HavingTrouble = styled.div`
+const UIHavingTrouble = styled.div`
   text-align: center;
   padding: 15px;
 `;

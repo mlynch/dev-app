@@ -1,10 +1,13 @@
 import React from "react";
 import { DiscoveredService } from "./models";
+import { ActionTypes } from "./actions";
+import { NetworkStatus } from "@capacitor/core";
 
 let AppContext = (React as any).createContext();
 
 export interface StateType {
   services: DiscoveredService[];
+  networkStatus?: NetworkStatus;
 }
 
 let initialState: StateType = {
@@ -13,8 +16,11 @@ let initialState: StateType = {
 
 let reducer = (state: any, action: any) => {
   switch(action.type) {
-    case "setServices": {
+    case ActionTypes.SET_SERVICES: {
       return { ...state, services: action.services }
+    }
+    case ActionTypes.SET_NETWORK_STATUS: {
+      return { ...state, networkStatus: action.status }
     }
   }
   return state;

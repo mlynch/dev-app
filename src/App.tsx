@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import { IonPage, IonApp, IonSplitPane } from '@ionic/react';
-import { Route, Redirect, Switch, withRouter, RouteComponentProps } from 'react-router';
+import { Route, Switch } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import './App.css';
