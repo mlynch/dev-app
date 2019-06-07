@@ -16,6 +16,7 @@ import serveIcon from '../assets/serve-icon.svg';
 import buildIcon from '../assets/build-icon.svg';
 import enjoyIcon from '../assets/enjoy-icon.svg';
 import { CircleAvatar } from '../components/CircleAvatar';
+import { LetterAvatar } from '../components/LetterAvatar';
 
 const renderNetworkStatus = (status: NetworkStatus) => {
   console.log('Network status', status);
@@ -34,14 +35,16 @@ const renderNetworkStatus = (status: NetworkStatus) => {
 const renderServices = (services: DiscoveredService[], onSelect: (service: DiscoveredService) => void) => {
   return (
     <>
-      <h4>Discovered</h4>
+      <UIPadded>
+        <h4>Discovered</h4>
+      </UIPadded>
       <IonList>
         {services.map(service => {
           return (
             <IonItem onClick={() => onSelect(service)} key={service.id}>
-              <IonAvatar>
+              <LetterAvatar slot="start">
                 {service.name[0]}
-              </IonAvatar>
+              </LetterAvatar>
               <IonLabel>
                 <h2>{service.name}</h2>
                 <p>{service.hostname} &middot; {service.address}</p>
@@ -80,6 +83,8 @@ export const AppChoosePage: React.SFC = () => {
     const searchInterval = setInterval(() => {
       _getServices();
     }, 10000);
+
+    _getServices();
 
     return () => {
       clearInterval(searchInterval);
@@ -153,7 +158,6 @@ export const AppChoosePage: React.SFC = () => {
             </IonItem>
           </IonList>
           <UIHavingTrouble>
-            <a href="#" onClick={() => setShowHelp(true)}>Having trouble?</a>
           </UIHavingTrouble>
         </UIListWrapper>
       </IonContent>
@@ -161,6 +165,7 @@ export const AppChoosePage: React.SFC = () => {
         <div>
           Listening for apps...
         </div>
+        <a href="#" onClick={() => setShowHelp(true)}>Having trouble?</a>
         <IonSpinner name="lines" />
       </UIAppListening>
       <AppConnect
@@ -221,6 +226,10 @@ const UIAppListening = styled.div`
   font-size: 14px;
   background-color: #27323F;
   border-radius: 12px;
+
+  a {
+    margin-right: 10px;
+  }
 
   div {
     flex: 1;

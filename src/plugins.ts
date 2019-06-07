@@ -40,16 +40,18 @@ export class UDPDiscoveryWeb extends WebPlugin {
   }
 
   async getServices() {
-    return [
-      {
-        "id": "max-ionic",
-        "name": "Max Ionic",
-        "hostname": "localhost",
-        "address": "localhost",
-        "port": "3333",
-        "path": "" 
-      }
-    ];
+    return {
+      services: [
+        {
+          "id": "max-ionic",
+          "name": "Max Ionic",
+          "hostname": "localhost",
+          "address": "localhost",
+          "port": "3333",
+          "path": "" 
+        }
+      ]
+    };
   }
 }
 
