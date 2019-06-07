@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonButton, IonToolbar, IonModal, IonTitle, IonContent, IonList, IonItem, IonLabel, IonInput } from '@ionic/react';
+import { IonButton, IonToolbar, IonModal, IonTitle, IonContent, IonList, IonItem, IonLabel, IonInput, IonHeader, IonButtons } from '@ionic/react';
 
 import { DiscoveredService } from '../models';
 
@@ -29,9 +29,14 @@ export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConne
       isOpen={isOpen}
       onDidDismiss={handleDismiss}
     >
-      <IonToolbar>
-        <IonTitle>Connect to App</IonTitle>
-      </IonToolbar>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Connect to App</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={_ => handleDismiss()} fill="clear">Close</IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
         <form onSubmit={(e) => { e.preventDefault(); handleConnect(makeService({ hostname, port }))}}>
           <IonList>

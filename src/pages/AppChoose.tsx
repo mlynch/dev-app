@@ -229,6 +229,8 @@ const UIAppListening = styled.div`
 
   a {
     margin-right: 10px;
+    color: #4D8DFF;
+    text-decoration: none;
   }
 
   div {
