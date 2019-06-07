@@ -15,6 +15,7 @@ import networkIcon from '../assets/network-icon.svg';
 import serveIcon from '../assets/serve-icon.svg';
 import buildIcon from '../assets/build-icon.svg';
 import enjoyIcon from '../assets/enjoy-icon.svg';
+import { CircleAvatar } from '../components/CircleAvatar';
 
 const renderNetworkStatus = (status: NetworkStatus) => {
   console.log('Network status', status);
@@ -117,41 +118,44 @@ export const AppChoosePage: React.SFC = () => {
         <UIPadded>
           <h4>Instructions</h4>
         </UIPadded>
-        <IonList>
-          <IonItem>
-            <IonAvatar>
-              <img src={wifiIcon} alt="Wi-Fi" />
-            </IonAvatar>
-            <IonLabel>Enable &amp; connect to Wi-Fi</IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonAvatar>
-              <img src={networkIcon} alt="Network" />
-            </IonAvatar>
-            <IonLabel>Connect computer to same network</IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonAvatar>
-              <img src={serveIcon} alt="Serve" />
-            </IonAvatar>
-            <IonLabel>Run <code>ionic serve -c</code></IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonAvatar>
-              <img src={buildIcon} alt="Build" />
-            </IonAvatar>
-            <IonLabel>Allow app to build</IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonAvatar>
-              <img src={enjoyIcon} alt="Enjoy" />
-            </IonAvatar>
-            <IonLabel>Preview &amp; enjoy</IonLabel>
-          </IonItem>
+        <UIListWrapper>
+          <IonList>
+            <UISideLine />
+            <IonItem>
+              <CircleAvatar slot="start">
+                <img src={wifiIcon} alt="Wi-Fi" />
+              </CircleAvatar>
+              <IonLabel>Enable &amp; connect to Wi-Fi</IonLabel>
+            </IonItem>
+            <IonItem>
+              <CircleAvatar slot="start">
+                <img src={networkIcon} alt="Network" />
+              </CircleAvatar>
+              <IonLabel>Connect computer to same network</IonLabel>
+            </IonItem>
+            <IonItem>
+              <CircleAvatar slot="start">
+                <img src={serveIcon} alt="Serve" />
+              </CircleAvatar>
+              <IonLabel>Run <code>ionic serve -c</code></IonLabel>
+            </IonItem>
+            <IonItem>
+              <CircleAvatar slot="start">
+                <img src={buildIcon} alt="Build" />
+              </CircleAvatar>
+              <IonLabel>Allow app to build</IonLabel>
+            </IonItem>
+            <IonItem>
+              <CircleAvatar slot="start">
+                <img src={enjoyIcon} alt="Enjoy" />
+              </CircleAvatar>
+              <IonLabel>Preview &amp; enjoy</IonLabel>
+            </IonItem>
+          </IonList>
           <UIHavingTrouble>
             <a href="#" onClick={() => setShowHelp(true)}>Having trouble?</a>
           </UIHavingTrouble>
-        </IonList>
+        </UIListWrapper>
       </IonContent>
       <UIAppListening>
         <div>
@@ -169,6 +173,20 @@ export const AppChoosePage: React.SFC = () => {
     </IonPage>
   );
 }
+
+const UIListWrapper = styled.div`
+  position: relative;
+`;
+
+const UISideLine = styled.div`
+  position: absolute;
+  left: 29px;
+  background-color: #27323F;
+  width: 2px;
+  top: 24px;
+  bottom: 12px;
+  z-index: 2;
+`;
 
 const UIPadded = styled.div`
   padding: 16px;
