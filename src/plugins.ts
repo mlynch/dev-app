@@ -11,16 +11,14 @@ export class CapacitorViewWeb extends WebPlugin {
     });
   }
 
-  async open(options: { url: string }) {
-    console.log('Would open preview');
-
+  async open(options: { hostname: string, port: number, path: string }) {
+    const url = `http://${options.hostname}:${options.port}${options.path || ''}`;
     Browser.open({
-      url: options.url
+      url
     });
   }
 
-  async close(options: { url: string }) {
-    console.log('Would close preview');
+  async close() {
   }
 }
 export const CapacitorView = new CapacitorViewWeb();

@@ -66,9 +66,10 @@ export const AppChoosePage: React.SFC = () => {
   const [ showHelp, setShowHelp ] = useState(false);
 
   const connectToApp = useCallback((service: DiscoveredService) => {
-    const url = `http://${service.hostname}:${service.port}${service.path || ''}`;
     CapacitorView.open({
-      url
+      hostname: service.address,
+      port: service.port,
+      path: service.path
     });
   }, []);
 
@@ -103,7 +104,9 @@ export const AppChoosePage: React.SFC = () => {
           <IonTitle></IonTitle>
           <IonButtons slot="end">
             <IonButton fill="clear" onClick={() => setShowAppConnect(true)}>
-              <IonIcon name="add" />
+              <UIAddIcon>
+                <IonIcon name="add" />
+              </UIAddIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -157,9 +160,9 @@ export const AppChoosePage: React.SFC = () => {
               <IonLabel>Preview &amp; enjoy</IonLabel>
             </IonItem>
           </IonList>
-          <UIHavingTrouble>
-          </UIHavingTrouble>
         </UIListWrapper>
+        <UIHavingTrouble>
+        </UIHavingTrouble>
       </IonContent>
       <UIAppListening>
         <div>
@@ -242,3 +245,7 @@ const UIHavingTrouble = styled.div`
   text-align: center;
   padding: 15px;
 `;
+
+const UIAddIcon = styled.div`
+  font-size: 30px;
+`

@@ -5,14 +5,19 @@ public class CapacitorView: CAPPlugin {
   var previewVC: PreviewViewController?
   
   @objc func open(_ call: CAPPluginCall) {
-    guard let url = call.getString("url") else {
-      call.reject("Must provide a URL")
+    guard let hostname = call.getString("hostname") else {
+      call.reject("Must provide a hostname")
       return
     }
-    print("Opening new Capacitor view at URL", url)
+    let port = call.getInt("port") ?? 80
+    let path = call.getString("path") ?? "/"
+      
+    print("Opening new Capacitor view at hostname and port", hostname, port)
     
     let vc = PreviewViewController()
-    vc.url = url
+    vc.hostname = hostname
+    vc.port = port
+    vc.path = path
     vc.closeHandler = {() -> Void in
       vc.dismiss(animated: true, completion: {
         call.resolve()
@@ -51,19 +56,29 @@ public class CapacitorView: CAPPlugin {
   }
   
   private func showDevMenu() {
+    guard let vc = previewVC else {
+      return
+    }
+    
     let alert = UIAlertController(title: "Dev Menu", message: nil, preferredStyle: .actionSheet)
     
     alert.addAction(UIAlertAction(title: "Reload", style: .default , handler:{ (UIAlertAction)in
-      print("User click Approve button")
+      vc.reload()
     }))
     
-    alert.addAction(UIAlertAction(title: "Exit Preview", style: .cancel, handler:{ (UIAlertAction)in
+    alert.addAction(UIAlertAction(title: "Exit Preview", style: .destructive, handler:{ (UIAlertAction)in
       self.closePreview {
         
       }
     }))
     
-    self.bridge.viewController.present(alert, animated: true, completion: {
+    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:{ (UIAlertAction)in
+      alert.dismiss(animated: true, completion: {
+        
+      })
+    }))
+    
+    vc.present(alert, animated: true, completion: {
       
     })
   }
@@ -71,13 +86,19 @@ public class CapacitorView: CAPPlugin {
 
 class PreviewViewController : UIViewController, UIGestureRecognizerDelegate {
   public var capVC: CAPBridgeViewController?
-  public var url: String?
+  public var hostname: String?
+  public var port: Int = 80
+  public var path: String = "/"
   public var closeHandler: (() -> Void)?
   public var shakeHandler: (() -> Void)?
+
+  public func reload() {
+    capVC?.bridge?.reload()
+  }
   
   public override func viewDidLoad() {
-    guard let url = self.url else {
-      print("Missing URL")
+    guard let hostname = self.hostname else {
+      print("Missing hostname")
       return
     }
     
@@ -94,7 +115,17 @@ class PreviewViewController : UIViewController, UIGestureRecognizerDelegate {
     
     capVC = CAPBridgeViewController()
     
-    capVC!.config = "{ \"server\": { \"url\": \"\(url)\" }}"
+    let url = "http://\(hostname):\(port)\(path)"
+    let configText = """
+    {
+      "server": {
+        "url": "\(url)",
+        "allowNavigation": ["\(hostname)"]
+      }
+    }
+    """
+    
+    capVC!.config = configText
     capVC!.view.frame = UIScreen.main.bounds
     self.view.addSubview(capVC!.view!)
   }
