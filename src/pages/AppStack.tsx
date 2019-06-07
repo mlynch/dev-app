@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel, IonApp, IonSplitPane, IonPage } from '@ionic/react';
-import { Route, Redirect, Router, Switch } from 'react-router';
+import { IonRouterOutlet, IonPage } from '@ionic/react';
+import { Route, Redirect } from 'react-router';
 
 import { AppContext } from '../State';
 import { AppChoosePage } from './AppChoose';
@@ -9,7 +9,7 @@ import { Plugins, NetworkStatus } from '@capacitor/core';
 import { ActionTypes } from '../actions';
 
 export const AppStack: React.SFC = () => {
-  const { state, dispatch } = React.useContext(AppContext);
+  const { dispatch } = React.useContext(AppContext);
 
   useEffect(() => {
     const { Network } = Plugins;
@@ -17,7 +17,7 @@ export const AppStack: React.SFC = () => {
     const setStatus = (status: NetworkStatus) => {
       console.log('Setting network status', status);
       dispatch({
-        type: ActionTypes.SET_NETWORK_STATUS,
+        type: ActionTypes.SetNetworkStatus,
         status
       })
     }
@@ -36,7 +36,7 @@ export const AppStack: React.SFC = () => {
     return () => {
       handle.remove();
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <IonPage>

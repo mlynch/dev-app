@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { IonPage, IonButton, IonList, IonItem, IonAvatar, IonLabel, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon, IonMenuButton, IonSpinner } from '@ionic/react';
+import { IonPage, IonButton, IonList, IonItem, IonLabel, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon, IonMenuButton, IonSpinner, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/react';
 import styled from 'styled-components'
 
 import { AppContext } from '../State';
 import { AppConnect } from './AppConnect';
-import { AppConnectOptions, DiscoveredService } from '../models';
+import { DiscoveredService } from '../models';
 
 import { Plugins, NetworkStatus } from '@capacitor/core';
 import { Help } from './Help';
@@ -32,25 +32,40 @@ const renderNetworkStatus = (status: NetworkStatus) => {
   );
 }
 
-const renderServices = (services: DiscoveredService[], onSelect: (service: DiscoveredService) => void) => {
+const renderService = (service: DiscoveredService, onSelect: (service: DiscoveredService) => void) => {
+  return (
+    <IonItem onClick={() => onSelect(service)} key={service.id}>
+      <LetterAvatar slot="start">
+        {service.name[0]}
+      </LetterAvatar>
+      <IonLabel>
+        <h2>{service.name}</h2>
+        <p>{service.hostname} &middot; {service.address}</p>
+      </IonLabel>
+    </IonItem>
+  );
+}
+
+const renderServices = (services: DiscoveredService[],
+                        onSelect: (service: DiscoveredService) => void,
+                        onRemove: (service: DiscoveredService) => void,
+                        showOptions = false) => {
   return (
     <>
-      <UIPadded>
-        <h4>Discovered</h4>
-      </UIPadded>
       <IonList>
         {services.map(service => {
-          return (
-            <IonItem onClick={() => onSelect(service)} key={service.id}>
-              <LetterAvatar slot="start">
-                {service.name[0]}
-              </LetterAvatar>
-              <IonLabel>
-                <h2>{service.name}</h2>
-                <p>{service.hostname} &middot; {service.address}</p>
-              </IonLabel>
-            </IonItem>
-          );
+          if (showOptions) {
+            return (
+              <IonItemSliding key={service.id}>
+                <IonItemOptions side="end">
+                  <IonItemOption onClick={() => onRemove(service)}>Remove</IonItemOption>
+                </IonItemOptions>
+                {renderService(service, onSelect)}
+              </IonItemSliding>
+            )
+          } else {
+            return renderService(service, onSelect);
+          }
         })}
       </IonList>
     </>
@@ -71,14 +86,29 @@ export const AppChoosePage: React.SFC = () => {
       port: service.port,
       path: service.path
     });
-  }, []);
+  }, [CapacitorView]);
+
+  const forgetService = useCallback((service: DiscoveredService) => {
+    dispatch({
+      type: ActionTypes.RemoveManualService,
+      service
+    });
+  }, [dispatch]);
+
+  const connectToManualApp = useCallback((service: DiscoveredService) => {
+    dispatch({
+      type: ActionTypes.SetManualServices,
+      services: state.manualServices ? [...state.manualServices, service] : [service]
+    });
+    connectToApp(service);
+  }, [dispatch]);
 
   useEffect(() => {
     async function _getServices() {
       const services = await Plugins.UDPDiscovery.getServices();
       dispatch({
-        type: ActionTypes.SET_SERVICES,
-        services: services && services.services || []
+        type: ActionTypes.SetServices,
+        services: services ? services.services : []
       });
     }
     const searchInterval = setInterval(() => {
@@ -90,7 +120,7 @@ export const AppChoosePage: React.SFC = () => {
     return () => {
       clearInterval(searchInterval);
     }
-  }, [])
+  }, [dispatch])
 
   console.log('Rendering services', state.services);
 
@@ -118,10 +148,25 @@ export const AppChoosePage: React.SFC = () => {
 
         {renderNetworkStatus(state.networkStatus)}
 
+        <UIPadded>
+          <h4>Discovered</h4>
+        </UIPadded>
         { state.services.length ?
-            renderServices(state.services, (service: DiscoveredService) => {
-              connectToApp(service);
-            }) : null }
+            renderServices(state.services,
+                           (service: DiscoveredService) => connectToApp(service),
+                           (_: DiscoveredService) => {}) : null }
+
+        { state.manualServices.length ? (
+          <>
+            <UIPadded>
+              <h4>Manual</h4>
+            </UIPadded>
+            {renderServices(state.manualServices,
+                            (service: DiscoveredService) => connectToApp(service),
+                            (service: DiscoveredService) => forgetService(service),
+                            true)}
+          </>
+        ) : null}
 
         <UIPadded>
           <h4>Instructions</h4>
@@ -173,7 +218,7 @@ export const AppChoosePage: React.SFC = () => {
       </UIAppListening>
       <AppConnect
         isOpen={showAppConnect}
-        handleConnect={connectToApp}
+        handleConnect={connectToManualApp}
         handleDismiss={() => setShowAppConnect(false)} />
       <Help
         isOpen={showHelp}

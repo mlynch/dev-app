@@ -1,7 +1,6 @@
 import React from 'react';
-import { IonIcon, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonListHeader, IonItem, IonLabel, IonMenuToggle } from '@ionic/react';
+import { IonIcon, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonMenuToggle } from '@ionic/react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { History } from 'history';
 
 const routes = {
   pages: [

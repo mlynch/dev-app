@@ -1,4 +1,6 @@
 export enum ActionTypes {
-  SET_SERVICES = 'setServices',
-  SET_NETWORK_STATUS = 'setNetworkStatus'
+  SetServices = 'setServices',
+  SetManualServices = 'setManualServices',
+  RemoveManualService = 'removeManualService',
+  SetNetworkStatus = 'setNetworkStatus'
 };

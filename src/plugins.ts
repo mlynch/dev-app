@@ -1,4 +1,4 @@
-import { registerWebPlugin, WebPlugin } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 
 import { Plugins } from '@capacitor/core';
 const { Browser } = Plugins;

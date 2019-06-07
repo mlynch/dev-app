@@ -1,25 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DiscoveredService } from "./models";
 import { ActionTypes } from "./actions";
 import { NetworkStatus } from "@capacitor/core";
+import { getObject, setObject } from "./util/localstorage";
 
 let AppContext = (React as any).createContext();
 
 export interface StateType {
   services: DiscoveredService[];
+  manualServices?: DiscoveredService[];
   networkStatus?: NetworkStatus;
 }
 
 let initialState: StateType = {
-  services: []
+  services: [],
+  manualServices: []
 };
+
+const persistedState = getObject('persistedState');
 
 let reducer = (state: any, action: any) => {
   switch(action.type) {
-    case ActionTypes.SET_SERVICES: {
+    case ActionTypes.SetServices: {
       return { ...state, services: action.services }
     }
-    case ActionTypes.SET_NETWORK_STATUS: {
+    case ActionTypes.SetManualServices: {
+      return { ...state, manualServices: action.services }
+    }
+    case ActionTypes.RemoveManualService: {
+      return { ...state, manualServices: state.manualServices.filter((s: DiscoveredService) => s !== action.service) }
+    }
+    case ActionTypes.SetNetworkStatus: {
       return { ...state, networkStatus: action.status }
     }
   }
@@ -38,12 +49,26 @@ const logger = (reducer: any) => {
 
 const loggerReducer = logger(reducer);
 
+function persistState(state: StateType) {
+  console.log('Persisting state', state.manualServices);
+  setObject('persistedState', {
+    manualServices: state.manualServices
+  });
+}
+
 function AppContextProvider(props: any) {
   const fullInitialState = {
     ...initialState,
+    ...persistedState
   }
 
   let [state, dispatch] = React.useReducer(loggerReducer, fullInitialState);
+
+  useEffect(() => {
+    // Persist any state we want to
+    persistState(state);
+  }, [state]);
+
   let value = { state, dispatch };
 
 

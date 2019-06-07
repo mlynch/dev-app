@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { IonPage, IonButton, IonToolbar, IonModal, IonTitle, IonContent, IonList, IonItem, IonLabel, IonInput, IonHeader, IonButtons } from '@ionic/react';
-import styled from 'styled-components'
-
-import { AppContext } from '../State';
-import { AppConnectOptions } from '../models';
+import React from 'react';
+import { IonPage, IonButton, IonToolbar, IonModal, IonTitle, IonContent, IonHeader, IonButtons } from '@ionic/react';
 
 interface Props {
   isOpen: boolean;

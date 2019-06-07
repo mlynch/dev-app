@@ -38,7 +38,7 @@ export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConne
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <form onSubmit={(e) => { e.preventDefault(); handleConnect(makeService({ hostname, port }))}}>
+        <form onSubmit={(e) => { e.preventDefault(); handleConnect(makeService({ hostname, port })); handleDismiss()}}>
           <IonList>
             <IonItem>
               <IonLabel>Hostname</IonLabel>
