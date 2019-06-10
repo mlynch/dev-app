@@ -11,11 +11,11 @@ interface Props {
 
 const makeService = ({ hostname, port } : { hostname: string, port: string }): DiscoveredService => {
   return {
-    id: hostname + port,
+    id: `${hostname}:${port}`,
     name: `${hostname}:${port}`,
     address: hostname,
     hostname,
-    port,
+    port: parseInt(port, 10),
     path: ''
   }
 }
@@ -23,6 +23,8 @@ const makeService = ({ hostname, port } : { hostname: string, port: string }): D
 export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConnect }) => {
   const [ hostname, setHostname ] = useState('localhost');
   const [ port, setPort ] = useState('3333');
+
+  console.log('Is open?', isOpen);
 
   return (
     <IonModal

@@ -96,9 +96,12 @@ export const AppChoosePage: React.SFC = () => {
   }, [dispatch]);
 
   const connectToManualApp = useCallback((service: DiscoveredService) => {
+    const filteredServices = state.manualServices.filter((s: DiscoveredService) => {
+      return s.address !== service.address && s.port !== service.port
+    });
     dispatch({
       type: ActionTypes.SetManualServices,
-      services: state.manualServices ? [...state.manualServices, service] : [service]
+      services: state.manualServices ? [service, ...filteredServices] : [service]
     });
     connectToApp(service);
   }, [dispatch]);
@@ -123,6 +126,8 @@ export const AppChoosePage: React.SFC = () => {
   }, [dispatch])
 
   console.log('Rendering services', state.services);
+
+  console.log('Show app connect?', showAppConnect);
 
   return (
     <IonPage>

@@ -7,6 +7,6 @@ export interface DiscoveredService {
   name: string;
   hostname: string;
   address: string;
-  port: string;
+  port: number;
   path: string;
 }
