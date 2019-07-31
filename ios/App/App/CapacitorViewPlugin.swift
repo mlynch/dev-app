@@ -14,22 +14,24 @@ public class CapacitorView: CAPPlugin {
       
     print("Opening new Capacitor view at hostname and port", hostname, port)
     
-    let vc = PreviewViewController()
-    vc.hostname = hostname
-    vc.port = port
-    vc.path = path
-    vc.closeHandler = {() -> Void in
-      vc.dismiss(animated: true, completion: {
-        call.resolve()
-      })
-    }
-    vc.shakeHandler = {() -> Void in
-      self.showDevMenu()
-    }
-    
-    previewVC = vc
-    
     DispatchQueue.main.async {
+      let vc = PreviewViewController()
+      vc.hostname = hostname
+      vc.port = port
+      vc.path = path
+      vc.closeHandler = {() -> Void in
+        vc.dismiss(animated: true, completion: {
+          call.resolve()
+        })
+      }
+      vc.shakeHandler = {() -> Void in
+        self.showDevMenu()
+      }
+      
+      self.previewVC = vc
+      
+      vc.modalPresentationStyle = .fullScreen
+      
       self.bridge.viewController.present(vc, animated: true) {
         print ("Closed cap view")
       }

@@ -9,22 +9,21 @@ interface Props {
   handleConnect: (options: DiscoveredService) => void;
 }
 
-const makeService = ({ hostname, port } : { hostname: string, port: string }): DiscoveredService => {
+const makeService = ({ hostname, port, path } : { hostname: string, port: string, path: string }): DiscoveredService => {
   return {
     id: `${hostname}:${port}`,
     name: `${hostname}:${port}`,
     address: hostname,
     hostname,
     port: parseInt(port, 10),
-    path: ''
+    path
   }
 }
 
 export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConnect }) => {
   const [ hostname, setHostname ] = useState('localhost');
   const [ port, setPort ] = useState('3333');
-
-  console.log('Is open?', isOpen);
+  const [ path, setPath ] = useState('/');
 
   return (
     <IonModal
@@ -40,7 +39,7 @@ export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConne
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <form onSubmit={(e) => { e.preventDefault(); handleConnect(makeService({ hostname, port })); handleDismiss()}}>
+        <form onSubmit={(e) => { e.preventDefault(); handleConnect(makeService({ hostname, port, path })); handleDismiss()}}>
           <IonList>
             <IonItem>
               <IonLabel>Hostname</IonLabel>
@@ -49,6 +48,10 @@ export const AppConnect: React.FC<Props> = ({ isOpen, handleDismiss, handleConne
             <IonItem>
               <IonLabel>Port</IonLabel>
               <IonInput type="text" value={port} onInput={(e: any) => setPort(e.target.value)} placeholder="Port (ex: 3333)" />
+            </IonItem>
+            <IonItem>
+              <IonLabel>Path</IonLabel>
+              <IonInput type="text" value={path} onInput={(e: any) => setPath(e.target.value)} placeholder="Path (ex: /)" />
             </IonItem>
           </IonList>
           <IonButton expand="block" type="submit">
