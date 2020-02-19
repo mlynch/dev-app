@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@capacitor/cli": "^1.0.0",
-    "@capacitor/core": "^1.0.0",
-    "@capacitor/ios": "^1.0.0",
+    "@capacitor/cli": "^1.5.0",
+    "@capacitor/core": "^1.5.0",
+    "@capacitor/ios": "^1.5.0",
     "@ionic/react": "0.0.5",
     "@types/jest": "24.0.13",
     "@types/node": "12.0.4",
