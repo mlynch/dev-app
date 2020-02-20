@@ -10,6 +10,7 @@ To get started, clone the repo, then run
 
 ```bash
 npm install
+npm run build
 npx cap sync
 npx cap open ios
 ```
